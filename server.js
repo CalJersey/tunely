@@ -20,13 +20,13 @@ let express = require('express'),
 // routes
 
 app.get('/', function (req, res) {
-
   res.sendFile('views/index.html', {root:__dirname});
     console.log(__dirname);
 });
 
 app.get('/api', controllers.api.index);
 app.get('/api/albums', controllers.albums.index);
+app.post('/api/albums', controllers.albums.create);
 
 
 app.listen(process.env.PORT || 3000, function (){

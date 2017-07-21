@@ -36,6 +36,7 @@ sampleAlbums.push({
 
 
 
+let formData = $(this).serialize();
 
 $(document).ready(function() {
   console.log('app.js loaded!');
@@ -45,6 +46,16 @@ $(document).ready(function() {
     success: handleSuccess,
     error: handleError
   });
+  $('#album-form form').on('submit', function(e){
+    e.preventDefault();
+    formData
+    console.log(formData);
+  });
+  $.post('/api/albums', formData, function(albums) {
+    console.log('album after POST', albums);
+    renderAlbum(albums);  //render the server's response
+  });
+   $(this).trigger("reset");
 });
 
 function handleSuccess(albums){
@@ -100,11 +111,7 @@ function renderAlbum(album) {
   $('#albums').append(albumHtml);
 };
 
-$('album-form form').on('submit', function(e){
-  e.preventDefault();
-  let formData = $(this).serialize();
-  console.log(formData);
-})
+
 
 
 
