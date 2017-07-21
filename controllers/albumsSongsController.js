@@ -10,11 +10,11 @@ function create(req, res) {
     db.Album.findById(req.params.albumId, function(err, album){
       if (err) {res.status(500).json({error:err.message});
       }
-      album.songs.push(song);
+      album.songs.splice(song.trackNumber-1, 0, song);
       album.save(function(err, album){
         if (err) {res.status(500).json({error:err.message});
         }
-        res.json(song);
+        res.json(album);
       });
     });
   });

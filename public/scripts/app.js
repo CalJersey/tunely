@@ -82,10 +82,7 @@ function handleError(err){
 // this function takes a single album and renders it to the page
 function renderAlbum(album) {
   console.log('rendering album', album);
-  var songHtml = "";
-  album.songs.forEach(function(song, i){
-    songHtml = songHtml + `${i+1}: ${song.name} `;
-  })
+
 
   var albumHtml = (`
     <div class="row album" data-album-id="${album._id}">
@@ -113,7 +110,7 @@ function renderAlbum(album) {
                   </li>
                   <li class="list-group-item">
                     <h4 class="inline-header">Songs:</h4>
-                    <span> ${songHtml}</span>
+                    <span id="${album._id}-songs"></span>
                   </li>
                 </ul>
               </div>
@@ -133,10 +130,19 @@ function renderAlbum(album) {
     <!-- end one album -->
   `);
   $('#albums').append(albumHtml);
+  renderSongs(album);
 };
 
-function renderSong(song){
-  console.log(song);
+function renderSongs(album){
+  var songHtml = "";
+  album.songs.sort(function(a, b) {
+    return a - b;
+  });
+  album.songs.forEach(function(song, i){
+    return songHtml = songHtml + `${i+1}: ${song.name} `;
+  })
+  let spanId = `#${album._id}-songs`;
+  $(spanId).html(songHtml);
 }
 
 function handleNewSongSubmit(){
@@ -150,7 +156,7 @@ function handleNewSongSubmit(){
     method: 'POST',
     url: requestUrl,
     data: data,
-    success: renderSong,
+    success: renderSongs,
     error: handleError
   });
 }
