@@ -64,7 +64,8 @@ $(document).ready(function() {
   });
   $('#saveSong').on('click', function (){
     handleNewSongSubmit();
-  });  
+  });
+
 });
 
 function handleSuccess(albums){
@@ -135,7 +136,17 @@ function renderAlbum(album) {
 };
 
 function handleNewSongSubmit(){
-  console.log("handleNewSongSubmit")
+  var albumId = $('#songModal').data('albumId');
+  var requestUrl = `http://localhost:3000/api/albums/:${albumId}/songs`;
+  var songName = $('#songName').val();
+  var trackNumber = $('#trackNumber').val();
+  var data = {"songName": songName, "trackNumber": trackNumber}
+  $.ajax({
+  method: 'POST',
+  url: requestUrl,
+  data: data,
+  success: handleSuccess,
+  error: handleError
 }
 
 
