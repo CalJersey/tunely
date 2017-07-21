@@ -36,7 +36,6 @@ sampleAlbums.push({
 
 
 
-let formData = $(this).serialize();
 
 $(document).ready(function() {
   console.log('app.js loaded!');
@@ -48,12 +47,12 @@ $(document).ready(function() {
   });
   $('#album-form form').on('submit', function(e){
     e.preventDefault();
-    formData
+    let formData = $(this).serialize();
     console.log(formData);
-  });
-  $.post('/api/albums', formData, function(albums) {
-    console.log('album after POST', albums);
-    renderAlbum(albums);  //render the server's response
+    $.post('/api/albums', formData, function(albums) {
+      console.log('album after POST', albums);
+      renderAlbum(albums);  //render the server's response
+    });
   });
    $(this).trigger("reset");
 });
