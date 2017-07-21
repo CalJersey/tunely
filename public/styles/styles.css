@@ -13,3 +13,11 @@
   vertical-align: baseline;
   margin-right: 12px;
 }
+
+.albumInput, .save-album {
+  display: none;
+}
+
+.albumData, .edit-album {
+  display: inline;
+}

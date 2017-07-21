@@ -72,6 +72,28 @@ $(document).ready(function() {
     });
   });
 
+  $('#albums').on('click', '.edit-album', function(e) {
+    console.log('edit');
+    var id= $(this).closest('.album').data('album-id');
+    var selectorId = `#${id}`,
+    selectorIdAlbumInput = `${selectorId} .albumInput`,
+    selectorIdAlbumData = `${selectorId} .albumData`,
+    selectorIdSaveAlbum = `${selectorId} .save-album`,
+    selectorIdEditAlbum = `${selectorId} .edit-album`;
+
+    $(selectorIdAlbumInput).css("display","inline");
+    $(selectorIdAlbumData).css("display","none");
+    $(selectorIdSaveAlbum).css("display","inline");
+    $(selectorIdEditAlbum).css("display","none");
+
+    // $.ajax({
+    //   method: 'UPDATE',
+    //   url: `/api/albums/${id}`,
+    //   success: updateAlbumSuccess,
+    //   error: handleError
+    // });
+  });
+
   $('#saveSong').on('click', function (){
     handleNewSongSubmit();
   });
@@ -108,15 +130,24 @@ function renderAlbum(album) {
                 <ul class="list-group">
                   <li class="list-group-item">
                     <h4 class='inline-header'>Album Name:</h4>
-                    <span class='album-name'>${album.name}</span>
+                    <span id="${album._id}-name" class='albumData'>${album.name}</span>
+                    <span id="${album._id}-name-input-span" class='albumInput'>
+                      <input id="${album._id}-name-input" type="text" name="album" value="${album.name}" size="${album.name.length}" required>
+                    </span>
                   </li>
                   <li class="list-group-item">
                     <h4 class='inline-header'>Artist Name:</h4>
-                    <span class='artist-name'>${album.artistName}</span>
+                    <span id="${album._id}-artistName" class='albumData'>${album.artistName}</span>
+                    <span id="${album._id}-artistName-input-span" class='albumInput'>
+                      <input id="${album._id}-artistName-input" type="text" name="artistName" size="${album.artistName.length}" value="${album.artistName}" required>
+                    </span>
                   </li>
                   <li class="list-group-item">
                     <h4 class='inline-header'>Released date:</h4>
-                    <span class='album-releaseDate'>${album.releaseDate}</span>
+                    <span id="${album._id}-releaseDate" class='albumData'>${album.releaseDate}</span>
+                    <span id="${album._id}-releaseDate-input-span" class='albumInput'>
+                      <input id="${album._id}-releaseDate-input" type="text" name="releaseDate"  size="${album.releaseDate.length}" value="${album.releaseDate}" required>
+                    </span>
                   </li>
                   <li class="list-group-item">
                     <h4 class="inline-header">Songs:</h4>
@@ -129,6 +160,8 @@ function renderAlbum(album) {
             <div class='panel-footer'>
               <button class='btn btn-primary add-song'>Add Song</button>
               <button class='btn btn-primary del-album'>Delete Album</button>
+              <button class='btn btn-primary edit-album'>Edit Album</button>
+              <button class='btn btn-primary save-album'>Save Changes</button>
             </div>
           </div>
         </div>
@@ -174,5 +207,12 @@ function deleteAlbumSuccess(albumId){
   $(id).empty();
 }
 
+function updateAlbumSuccess(albumId){
+
+  $(".albumInput").css("display","inline");
+  $(".albumData").css("display","none");
+  $(".save-album").css("display","inline");
+  $(".edit-album").css("display","none");
+}
 // this function takes a single album and renders it to the page
 // sampleAlbums.forEach()
