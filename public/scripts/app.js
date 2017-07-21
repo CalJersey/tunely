@@ -56,12 +56,22 @@ $(document).ready(function() {
     });
   });
   $('#albums').on('click', '.add-song', function(e) {
-    console.log('add-song clicked!');
     var id= $(this).closest('.album').data('album-id'); // "5665ff1678209c64e51b4e7b"
-    console.log(id)
     $('#songModal').attr('data-album-id',id);
     $('#songModal').modal()
   });
+
+  $('#albums').on('click', '.del-album', function(e) {
+    console.log('delete');
+    var id= $(this).closest('.album').data('album-id'); // "5665ff1678209c64e51b4e7b"
+    $.ajax({
+      method: 'DELETE',
+      url: `/api/albums/${id}`,
+      success: deleteAlbumSuccess,
+      error: handleError
+    });
+  });
+
   $('#saveSong').on('click', function (){
     handleNewSongSubmit();
   });
@@ -118,14 +128,12 @@ function renderAlbum(album) {
             <!-- end of album internal row -->
             <div class='panel-footer'>
               <button class='btn btn-primary add-song'>Add Song</button>
+              <button class='btn btn-primary del-album'>Delete Album</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
-
 
     <!-- end one album -->
   `);
@@ -161,6 +169,9 @@ function handleNewSongSubmit(){
   });
 }
 
+function deleteAlbumSuccess(data){
+  console.log('deleteAlbumSuccess');
+}
 
 // this function takes a single album and renders it to the page
 // sampleAlbums.forEach()

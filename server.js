@@ -27,6 +27,7 @@ app.get('/', function (req, res) {
 app.get('/api', controllers.api.index);
 app.get('/api/albums', controllers.albums.index);
 app.post('/api/albums', controllers.albums.create);
+app.delete('/api/albums/:albumId', controllers.albums.destroy);
 app.post('/api/albums/:albumId/songs', controllers.songs.create);
 
 app.listen(process.env.PORT || 3000, function (){
