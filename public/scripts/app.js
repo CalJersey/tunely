@@ -95,7 +95,7 @@ function renderAlbum(album) {
 
 
   var albumHtml = (`
-    <div class="row album" data-album-id="${album._id}">
+    <div class="row album" id="${album._id}" data-album-id="${album._id}">
       <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-default">
           <div class="panel-body">
@@ -169,8 +169,9 @@ function handleNewSongSubmit(){
   });
 }
 
-function deleteAlbumSuccess(data){
-  console.log('deleteAlbumSuccess');
+function deleteAlbumSuccess(albumId){
+  id = `#${albumId.albumId}`;
+  $(id).empty();
 }
 
 // this function takes a single album and renders it to the page
