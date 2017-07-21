@@ -1,13 +1,15 @@
 // require mongoose and seutp Schema
 
-let mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+var mongoose = require('mongoose'),
+  Schema = mongoose.Schema,
+  Song = require("./song.js");
 
   var AlbumSchema = new Schema({
        artistName: String,
        name: String,
        releaseDate: String,
-       genres: [String]
+       genres: [String],
+       songs:[Song.schema]
   });
 // create Schema
 

@@ -52,9 +52,19 @@ $(document).ready(function() {
     $.post('/api/albums', formData, function(albums) {
       console.log('album after POST', albums);
       renderAlbum(albums);  //render the server's response
+      $(this).trigger("reset");
     });
   });
-   $(this).trigger("reset");
+  $('#albums').on('click', '.add-song', function(e) {
+    console.log('add-song clicked!');
+    var id= $(this).closest('.album').data('album-id'); // "5665ff1678209c64e51b4e7b"
+    console.log(id)
+    $('#songModal').attr('data-album-id',id);
+    $('#songModal').modal()
+  });
+  $('#saveSong').on('click', function (){
+    handleNewSongSubmit();
+  });  
 });
 
 function handleSuccess(albums){
@@ -71,8 +81,13 @@ function handleError(err){
 // this function takes a single album and renders it to the page
 function renderAlbum(album) {
   console.log('rendering album', album);
+  var songHtml = "";
+  album.songs.forEach(function(song, i){
+    songHtml = songHtml + `${i+1}: ${song.name} `;
+  })
+
   var albumHtml = (`
-    <div class="row album">
+    <div class="row album" data-album-id="${album._id}">
       <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-default">
           <div class="panel-body">
@@ -95,22 +110,33 @@ function renderAlbum(album) {
                     <h4 class='inline-header'>Released date:</h4>
                     <span class='album-releaseDate'>${album.releaseDate}</span>
                   </li>
+                  <li class="list-group-item">
+                    <h4 class="inline-header">Songs:</h4>
+                    <span> ${songHtml}</span>
+                  </li>
                 </ul>
               </div>
             </div>
             <!-- end of album internal row -->
             <div class='panel-footer'>
+              <button class='btn btn-primary add-song'>Add Song</button>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+
+
+
     <!-- end one album -->
   `);
   $('#albums').append(albumHtml);
 };
 
-
+function handleNewSongSubmit(){
+  console.log("handleNewSongSubmit")
+}
 
 
 
