@@ -135,20 +135,25 @@ function renderAlbum(album) {
   $('#albums').append(albumHtml);
 };
 
-function handleNewSongSubmit(){
-  var albumId = $('#songModal').data('albumId');
-  var requestUrl = `http://localhost:3000/api/albums/:${albumId}/songs`;
-  var songName = $('#songName').val();
-  var trackNumber = $('#trackNumber').val();
-  var data = {"songName": songName, "trackNumber": trackNumber}
-  $.ajax({
-  method: 'POST',
-  url: requestUrl,
-  data: data,
-  success: handleSuccess,
-  error: handleError
+function renderSong(song){
+  console.log(song);
 }
 
+function handleNewSongSubmit(){
+  var albumId = $('#songModal').data('albumId');
+  var requestUrl = `http://localhost:3000/api/albums/${albumId}/songs`;
+  // var songName = $('#songName').val().serialize();
+  // var trackNumber = $('#trackNumber').val().serialize();
+  var data = $("#modalForm").serialize();
+  console.log(data);
+  $.ajax({
+    method: 'POST',
+    url: requestUrl,
+    data: data,
+    success: renderSong,
+    error: handleError
+  });
+}
 
 
 // this function takes a single album and renders it to the page

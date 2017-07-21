@@ -6,16 +6,17 @@ function index(req, res) {
 function create(req, res) {
   db.Song.create(req.body, function(err, song){
     if (err) {res.status(500).json({error:err.message});
-  }
-  db.Album.findById(req.param.albumId, function(err, album){
-    if (err) {res.status(500).json({error:err.message});
-  }
-  })
-  album.songs.push(song);
-  album.save(function(err, album){
-    if (err) {res.status(500).json({error:err.message});
-  });
-  res.json(song);
+    }
+    db.Album.findById(req.params.albumId, function(err, album){
+      if (err) {res.status(500).json({error:err.message});
+      }
+      album.songs.push(song);
+      album.save(function(err, album){
+        if (err) {res.status(500).json({error:err.message});
+        }
+        res.json(song);
+      });
+    });
   });
 };
 
