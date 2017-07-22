@@ -12,7 +12,7 @@ function index(req, res) {
 // POST /api/albums
 function create(req, res) {
   // create an album based on request body and send it back as JSON
-  console.log('body', req.body);
+
   // split at comma and remove and trailing space
   var genres = req.body.genres.split(',').map(function(item) { return item.trim(); } );
   req.body.genres = genres;
@@ -41,8 +41,19 @@ function destroy(req, res) {
 
 // PUT or PATCH /api/albums/:albumId
 function update(req, res) {
-  // find one album by id, update it based on request body,
-  // and send it back as JSON
+  db.Album.findById(req.params.albumId, function(err,album){
+    console.log('req.body:', JSON.stringify(req.body));
+    if (err) {res.status(500).json({error:err.message});
+    }
+    album.name = req.body.name;
+    album.artistName = req.body.artistName;
+    album.releaseDate = req.body.releaseDate;
+    album.save(function(err,savedAlbum){
+      if (err) {res.status(500).json({error:err.message});
+      }
+      res.json(album);
+    });
+  });
 }
 
 // controllers/albumsController.js

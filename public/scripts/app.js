@@ -45,6 +45,7 @@ $(document).ready(function() {
     success: handleSuccess,
     error: handleError
   });
+
   $('#album-form form').on('submit', function(e){
     e.preventDefault();
     let formData = $(this).serialize();
@@ -86,13 +87,31 @@ $(document).ready(function() {
     $(selectorIdSaveAlbum).css("display","inline");
     $(selectorIdEditAlbum).css("display","none");
 
-    // $.ajax({
-    //   method: 'UPDATE',
-    //   url: `/api/albums/${id}`,
-    //   success: updateAlbumSuccess,
-    //   error: handleError
-    // });
+
   });
+
+$('#albums').on('click', '.save-album', function(e) {
+  var id= $(this).closest('.album').data('album-id');
+  let formIdSelector = `#${id}-update`;
+  let data = $(formIdSelector).serialize();
+
+  $.ajax({
+    method: 'PUT',
+    url: `/api/albums/${id}`,
+    data: data,
+    success: updateAlbumSuccess,
+    error: handleError
+  });
+});
+  // $('#albums').on('click', '.save-album', function(e) {
+  //   e.preventDefault();
+  //   $.ajax({
+  //     method: 'UPDATE',
+  //     url: `/api/albums/${id}`,
+  //     success: updateAlbumSuccess,
+  //     error: handleError
+  //   });
+  // });
 
   $('#saveSong').on('click', function (){
     handleNewSongSubmit();
@@ -118,6 +137,7 @@ function renderAlbum(album) {
 
   var albumHtml = (`
     <div class="row album" id="${album._id}" data-album-id="${album._id}">
+    <form id="${album._id}-update" action="#" onsubmit="return false" method="PUT" class="album-update-form" name="${album._id}-update">
       <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-default">
           <div class="panel-body">
@@ -132,7 +152,7 @@ function renderAlbum(album) {
                     <h4 class='inline-header'>Album Name:</h4>
                     <span id="${album._id}-name" class='albumData'>${album.name}</span>
                     <span id="${album._id}-name-input-span" class='albumInput'>
-                      <input id="${album._id}-name-input" type="text" name="album" value="${album.name}" size="${album.name.length}" required>
+                      <input id="${album._id}-name-input" type="text" name="name" value="${album.name}" size="${album.name.length}" required>
                     </span>
                   </li>
                   <li class="list-group-item">
@@ -166,6 +186,7 @@ function renderAlbum(album) {
           </div>
         </div>
       </div>
+      </form>
     </div>
 
     <!-- end one album -->
@@ -207,12 +228,36 @@ function deleteAlbumSuccess(albumId){
   $(id).empty();
 }
 
-function updateAlbumSuccess(albumId){
+function updateAlbumSuccess(album){
 
-  $(".albumInput").css("display","inline");
-  $(".albumData").css("display","none");
-  $(".save-album").css("display","inline");
-  $(".edit-album").css("display","none");
+  let selectorId = `#${album._id}`,
+  selectorIdAlbumInput = `${selectorId} .albumInput`,
+  selectorIdAlbumData = `${selectorId} .albumData`,
+  selectorIdSaveAlbum = `${selectorId} .save-album`,
+  selectorIdEditAlbum = `${selectorId} .edit-album`,
+
+  selectorAlbumName = `${selectorId}-name`,
+  selectorArtistName = `${selectorId}-artistName`,
+  selectorReleaseDate = `${selectorId}-releaseDate`,
+
+  selectorAlbumNameInput = `${selectorId}-name-input`,
+  selectorArtistNameInput = `${selectorId}-artistName-input`,
+  selectorReleaseDateInput = `${selectorId}-releaseDate-input`;
+
+  albumName = $(selectorAlbumNameInput).val();
+  $(selectorAlbumName).html(albumName);
+
+  albumArtistName = $(selectorArtistNameInput).val();
+  $(selectorArtistName).html(albumArtistName);
+
+  albumReleaseDate = $(selectorReleaseDateInput).val();
+  $(selectorReleaseDate).html(albumReleaseDate);
+
+  $(selectorIdAlbumInput).css("display","none");
+  $(selectorIdAlbumData).css("display","inline");
+  $(selectorIdSaveAlbum).css("display","none");
+  $(selectorIdEditAlbum).css("display","inline");
+
 }
 // this function takes a single album and renders it to the page
 // sampleAlbums.forEach()
